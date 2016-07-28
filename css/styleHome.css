@@ -1,0 +1,14 @@
+body{
+	background-image: url("../images/pokeball.jpg"); 
+
+	background-size: cover;
+
+
+}
+p{
+	text-align: center;
+	color: black;
+}
+h2{
+	color: red;
+}
