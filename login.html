@@ -1,0 +1,74 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+	<meta name="google-signin-scope" content="profile email">
+	<meta name="google-signin-client_id" content="400491107231-3shgv69qqo7ia5ijeckpoko38abikprc.apps.googleusercontent.com"> 
+  <!--<meta name="google-signin-client_id" content="548590107766-2i6eti05v036olvd4s7iga926vvi0s8d.apps.googleusercontent.com"> -->
+    <script type="text/javascript" src="js/cookie.js"></script>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<title>Login</title>
+ 
+</head>
+
+<body onload="onSignIn()">
+	<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> 
+ <script>
+      if (sessionStorage.getItem("is_secure") != "y"){
+          window.location.replace("http://www.pokeclubgo.com");
+      }
+
+      var request = new XMLHttpRequest(); 
+      var profile;
+      var user_idtoken;
+      console.log("about to retrieve cookie");
+      var team = sessionStorage.getItem("team");
+      console.log("Local storage has: "+team);
+
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var user_idtoken = googleUser.getAuthResponse().id_token;
+        sessionStorage.setItem("id_token", user_idtoken);
+        //console.log("ID Token: " + id_token);
+        request.open("POST","https://pokeclubgo.herokuapp.com/signin" , true);
+		request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		request.send("email="+profile.getEmail()+"&fullName="+profile.getName()+"&id_token="+user_idtoken+"&team="+team);
+		// These lines of code initialize the httprequest object and send information in order to receive the proper JSON data 
+		request.onreadystatechange = function() {
+			console.log("Waiting for server...");
+			console.log(request.readyState);
+		    if (request.readyState == 4){
+			     parsedData = JSON.parse(request.responseText);
+			     console.log("Response Text: " + parsedData);
+                      if (parsedData.settings != "successfully inserted"){
+                          console.log("NOT SIGNED IN SUCCESSFULLY")
+                      }
+                      else if (sessionStorage.getItem("team") == "instinct"){
+                           window.location.replace("instinct/instincthome.html");
+                      }
+                      else if (sessionStorage.getItem("team") == "mystic"){
+                          window.location.replace("mystic/mystichome.html");
+
+                      }
+                      else if (sessionStorage.getItem("team") == "valor"){
+                          window.location.replace("valor/valorhome.html");
+                      }
+			}
+		}
+      };
+
+    </script>
+</body>
+</html>

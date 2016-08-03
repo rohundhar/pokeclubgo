@@ -10,7 +10,7 @@ $(document).ready(function(){
             console.log("PASSWORD:"+password);
             request.open("POST","https://pokeclubgo.herokuapp.com/passwordcheck" , true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            request.send("password="+password);
+            request.send("password="+password+"&team=mystic");
             // These lines of code initialize the httprequest object and send information in order to receive the proper JSON data 
 
             request.onreadystatechange = function() {
@@ -26,6 +26,12 @@ $(document).ready(function(){
                 }
                 else{
                     $('#mysincorrect').hide(1000);
+                    console.log("CORRECT PASSWORD. REDIRECT..")
+    
+                    sessionStorage.setItem('team', "mystic");
+                    sessionStorage.setItem("is_secure", "y");
+
+                    window.location.replace("login.html");
                 }
                 }
             }
@@ -45,8 +51,10 @@ $(document).ready(function(){
                     console.log("PASSWORD:"+password);
                     request.open("POST","https://pokeclubgo.herokuapp.com/passwordcheck" , true);
                     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    request.send("password="+password);
+                    request.send("password="+password+"&team=valor");
                     // These lines of code initialize the httprequest object and send information in order to receive the proper JSON data 
+
+
 
                     request.onreadystatechange = function() {
                         console.log("Waiting for password confirmation...");
@@ -60,6 +68,11 @@ $(document).ready(function(){
                             }
                             else{
                                 $('#valincorrect').hide(1000);
+                                sessionStorage.setItem('team', "valor");
+                                sessionStorage.setItem("is_secure", "y");
+                                console.log("CORRECT PASSWORD. REDIRECT..")
+                                window.location.replace("login.html");
+
                             }
                         }
 
@@ -80,7 +93,8 @@ $(document).ready(function(){
                     console.log("PASSWORD:"+password);
                     request.open("POST","https://pokeclubgo.herokuapp.com/passwordcheck" , true);
                     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    request.send("password="+password);
+                    request.send("password="+password+"&team=instinct");
+
                     // These lines of code initialize the httprequest object and send information in order to receive the proper JSON data 
 
                     request.onreadystatechange = function() {
@@ -96,9 +110,11 @@ $(document).ready(function(){
                                 $('#instincorrect').show();
                             }
                             else{
-                                $('#instincorrect').hide(1000);
+                                $('#instincorrect').hide(400);
+                                sessionStorage.setItem('team', "instinct");
+                                sessionStorage.setItem("is_secure", "y");
                                 console.log("CORRECT PASSWORD. REDIRECT..")
-                                window.location.replace("http://home.pokeclubgo.com");
+                                window.location.replace("login.html");
 
                             }
                         }
@@ -112,12 +128,7 @@ $(document).ready(function(){
 
         });
 
-
-
-
-
-
-
+});
 
 
 /*
@@ -190,7 +201,5 @@ $(document).ready(function(){
         }
 
     }); */
-
-});
 
 
